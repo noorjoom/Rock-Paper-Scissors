@@ -1,3 +1,25 @@
+let playerScore = 0;
+let computerScore = 0;
+let roundResult = "";
+
+const playerScoreElement = document.querySelector('.humanScore');
+const computerScoreElement = document.querySelector('.computerScore');
+const playerChoiceElement = document.getElementById('playerChoice');
+const computerChoiceElement = document.getElementById('computerChoice');
+const roundResultElement = document.querySelector('.round-result');
+
+
+function updateScoreDisplay() {
+    playerScoreElement.textContent = `Your Score: ${playerScore}`;
+    computerScoreElement.textContent = `Computer's Score: ${computerScore}`;
+}
+
+function updateChoicesDisplay(playerChoice, computerChoice) {
+    playerChoiceElement.textContent = playerChoice;
+    computerChoiceElement.textContent = computerChoice;
+    roundResultElement.textContent = `Round Result: ${roundResult}`;
+}
+
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -10,73 +32,54 @@ function getComputerChoice(x) {
     return choices[randomIndex];
 }
 
-// console.log(getComputerChoice());
 
-function playRound() {
+function playRound(playerSelection) {
+    const computer = getComputerChoice();
 
-    const playerSelection = prompt("Choose Rock, Paper or Scissors");
+    // console.log(`Player chose: ${playerSelection}`);
+    // console.log(`Computer chose: ${computer}`);
     
-    if (!playerSelection) {
-        console.log("Invalid choice");
-        return "Invalid choice";
-    }
-    
-    const player = playerSelection.toLowerCase();
-
-    if (
-        player !== "rock" &&
-        player !== "paper" &&
-        player !== "scissors"
-    ) {
-        console.log("Invalid choice");
-        return "Invalid choice";
-    }
-
-    const computerSelection = getComputerChoice();
-    const computer = computerSelection.toLowerCase();
-
-    if (player === computer) {
-        console.log("It's a tie!");
-        return "tie";
+    if (playerSelection === computer) {
+        // console.log("It's a tie!");
+        updateScoreDisplay();
+        roundResult = "Tie";
     } else if (
-        (player === "rock" && computer === "scissors") ||
-        (player === "paper" && computer === "rock") ||
-        (player === "scissors" && computer === "paper")
+        (playerSelection === "rock" && computer === "scissors") ||
+        (playerSelection === "paper" && computer === "rock") ||
+        (playerSelection === "scissors" && computer === "paper")
     ) {
-        console.log(`You Win! ${player} beats ${computer}`);
-        return "win";
+        // console.log(`You Win! ${playerSelection} beats ${computer}`);
+        playerScore++;
+        roundResult = "Player wins";
     } else {
-        console.log(`You Lose! ${computer} beats ${player}`);
-        return "lose";
+        // console.log(`You Lose! ${computer} beats ${playerSelection}`);
+        computerScore++;
+        roundResult = "Computer wins";
+    }
+
+    updateScoreDisplay();
+    updateChoicesDisplay(playerSelection, computer);
+
+    if (playerScore === 5 || computerScore === 5) {
+        // Player or computer wins the game
+        alert(playerScore === 5 ? "Player wins the game by reaching a score of 5!" : "Computer wins the game by reaching a score of 5!");
+        resetGame();
     }
 }
 
-//this function is not working as supposed to.
-function game() {
-    let humanWins = 0;
-    let computerWins = 0;
+const buttons = document.querySelectorAll('button');
+    
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const playerSelection = button.id;
+        playRound(playerSelection);
+    });
+});
 
-    for (let i = 0; i < 5; i++) {
-        const roundResult = playRound();
-
-        if (roundResult === "win") {
-            humanWins++;
-        }
-        else if (roundResult === "lose") {
-            computerWins++;
-        }
-    }
-
-    if (humanWins > computerWins) {
-        console.log("Human wins!!");
-    }
-    else if (computerWins > humanWins) {
-        console.log("Computer Wins!!!");
-    }
-    else {
-        console.log("It's a tie!");
-    }
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    roundResult = "";
+    updateScoreDisplay();
+    updateChoicesDisplay("", "");
 }
-
-game();
-

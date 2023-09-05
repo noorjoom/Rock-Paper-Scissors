@@ -1,0 +1,36 @@
+body {
+    background-color: lightgoldenrodyellow;
+    font-family: 'Alegreya SC';font-size: 22px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 50px;
+    border: red solid 3px;
+    border-radius: 30px;
+}
+
+.score {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.result {
+    display: flex;
+    flex-direction: column;
+}
+
+.choices {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+img {
+    width: 200px;
+    border-radius: 50%;
+}
