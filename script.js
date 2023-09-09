@@ -1,12 +1,14 @@
 let playerScore = 0;
 let computerScore = 0;
 let roundResult = "";
+let gameResult = "";
 
 const playerScoreElement = document.querySelector('.humanScore');
 const computerScoreElement = document.querySelector('.computerScore');
 const playerChoiceElement = document.getElementById('playerChoice');
 const computerChoiceElement = document.getElementById('computerChoice');
 const roundResultElement = document.querySelector('.round-result');
+const gameResultElement = document.querySelector('.game-result');
 
 
 function updateScoreDisplay() {
@@ -18,6 +20,7 @@ function updateChoicesDisplay(playerChoice, computerChoice) {
     playerChoiceElement.textContent = playerChoice;
     computerChoiceElement.textContent = computerChoice;
     roundResultElement.textContent = `Round Result: ${roundResult}`;
+    gameResultElement.textContent = `Game Result: ${gameResult}`;
 }
 
 function getRandomInt(min, max) {
@@ -36,12 +39,12 @@ function getComputerChoice(x) {
 function playRound(playerSelection) {
     const computer = getComputerChoice();
 
+    
     // console.log(`Player chose: ${playerSelection}`);
     // console.log(`Computer chose: ${computer}`);
     
     if (playerSelection === computer) {
         // console.log("It's a tie!");
-        updateScoreDisplay();
         roundResult = "Tie";
     } else if (
         (playerSelection === "rock" && computer === "scissors") ||
@@ -56,15 +59,27 @@ function playRound(playerSelection) {
         computerScore++;
         roundResult = "Computer wins";
     }
-
+    
     updateScoreDisplay();
     updateChoicesDisplay(playerSelection, computer);
-
+    
+    
     if (playerScore === 5 || computerScore === 5) {
-        // Player or computer wins the game
-        alert(playerScore === 5 ? "Player wins the game by reaching a score of 5!" : "Computer wins the game by reaching a score of 5!");
-        resetGame();
+        const gameButtons = document.querySelectorAll('.game-button');
+    
+        gameButtons.forEach((button) => {
+            button.disabled = true;
+        });
     }
+
+    if (playerScore === 5) {
+        gameResult = "You Win!!! Congratulations";
+        gameResultElement.textContent = `Game Result: ${gameResult}`;
+    } else if (computerScore === 5) {
+        gameResult = "Computer Wins.. Better luck next time.";
+        gameResultElement.textContent = `Game Result: ${gameResult}`;
+    }
+        // resetGame();
 }
 
 const buttons = document.querySelectorAll('button');
@@ -76,10 +91,23 @@ buttons.forEach((button) => {
     });
 });
 
+const newGameButton = document.querySelector('#newGame');
+newGameButton.addEventListener('click', resetGame);
+
+newGameButton.disabled = false;
+
 function resetGame() {
     playerScore = 0;
     computerScore = 0;
     roundResult = "";
+    gameResult = "";
     updateScoreDisplay();
     updateChoicesDisplay("", "");
+
+    button.forEach((button) => {
+        button.disabled = false;
+    });
+    gameResultElement.textContent = `Game Result: ${gameResult}`;
 }
+
+resetGame();
